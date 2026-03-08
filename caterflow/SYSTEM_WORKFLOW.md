@@ -1,5 +1,3 @@
-# Catering_Management_system
-
 # CaterFlow - Complete System Workflow Documentation
 
 ## Table of Contents
@@ -1120,3 +1118,29 @@ For every completed event with payment_status = 'paid':
 ```
 
 ---
+
+## Quick Reference: File Locations
+
+| Component | Path |
+|-----------|------|
+| Database Schema | `/database/schema.sql` |
+| ER Diagram | `/database/ER_DIAGRAM.md` |
+| API Documentation | `/backend/API_DOCUMENTATION.md` |
+| Backend Models | `/backend/models/*.js` |
+| Backend Controllers | `/backend/controllers/*.js` |
+| API Routes | `/backend/routes/index.js` |
+| Frontend Pages | `/frontend/app/**/*.js` |
+
+---
+
+## Default Credentials (Development)
+
+| Role | Email | Password |
+|------|-------|----------|
+| Super Admin | `admin@caterflow.com` | `SuperAdmin123!` |
+| Sample Tenant 1 | `owner@royalcatering.com` | `Admin123!` |
+| Sample Tenant 2 | `owner@urbanevents.com` | `Admin123!` |
+
+---
+
+*Generated for CaterFlow Catering Management SaaS Platform*
