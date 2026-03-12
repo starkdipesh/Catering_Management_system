@@ -13,8 +13,11 @@ class DashboardController {
     try {
       const tenantId = req.tenantId;
       
-      // Get tenant stats
-      const tenantStats = await Tenant.getStats(tenantId);
+      // Get basic counts
+      const totalEvents = await Event.count(tenantId);
+      const totalCustomers = await Customer.count(tenantId);
+      const totalUsers = await User.findByTenant(tenantId, { limit: 1000 });
+      const totalInvoices = await Invoice.count(tenantId);
       
       // Get upcoming events (next 7 days)
       const today = new Date().toISOString().split('T')[0];
@@ -26,43 +29,25 @@ class DashboardController {
         limit: 5,
       });
       
-      // Get low stock alerts
-      const lowStockItems = await InventoryItem.getLowStockItems(tenantId);
-      
-      // Get invoice stats
-      const invoiceStats = await Invoice.getStats(tenantId);
-      
-      // Get recent payments
-      const recentPayments = await Payment.findAll(tenantId, {
-        limit: 5,
+      // Get low stock items
+      const lowStockItems = await InventoryItem.findAll(tenantId, {
+        lowStock: true,
+        limit: 10,
       });
-      
-      // Get monthly revenue data for charts
-      const monthlyRevenue = await Event.getMonthlyRevenue(tenantId, 12);
-      
-      // Get event types distribution
-      const eventTypes = await Event.getEventTypesDistribution(tenantId);
 
       res.json({
         success: true,
         data: {
           stats: {
-            totalEvents: tenantStats.total_events,
-            upcomingEvents: tenantStats.upcoming_events,
-            completedEvents: tenantStats.completed_events,
-            totalCustomers: tenantStats.total_customers,
-            totalStaff: tenantStats.total_staff,
-            monthlyRevenue: tenantStats.monthly_revenue,
-            totalRevenue: tenantStats.total_revenue,
-            outstandingAmount: invoiceStats.total_outstanding,
-            overdueInvoices: invoiceStats.overdue_invoices,
-            lowStockCount: lowStockItems.length,
+            totalEvents,
+            totalCustomers,
+            totalUsers: totalUsers.length,
+            totalInvoices,
+            upcomingEvents: upcomingEvents.length,
+            lowStockItems: lowStockItems.length,
           },
           upcomingEvents,
-          lowStockAlerts: lowStockItems.slice(0, 5),
-          recentPayments,
-          monthlyRevenue,
-          eventTypes,
+          lowStockItems,
         },
       });
     } catch (error) {

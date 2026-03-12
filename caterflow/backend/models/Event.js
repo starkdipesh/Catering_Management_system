@@ -39,9 +39,15 @@ class Event {
       FROM events e
       LEFT JOIN customers c ON e.customer_id = c.id
       LEFT JOIN users u ON e.assigned_manager_id = u.id
-      WHERE e.tenant_id = ?
     `;
-    const params = [tenantId];
+    const params = [];
+    
+    if (tenantId) {
+      sql += ` WHERE e.tenant_id = ?`;
+      params.push(tenantId);
+    } else {
+      sql += ` WHERE 1=1`;
+    }
     
     if (status) {
       sql += ` AND e.status = ?`;
@@ -82,8 +88,7 @@ class Event {
     const sortField = allowedSortFields.includes(sortBy) ? sortBy : 'event_date';
     const order = sortOrder.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
     
-    sql += ` ORDER BY e.${sortField} ${order} LIMIT ? OFFSET ?`;
-    params.push(limit, offset);
+    sql += ` ORDER BY e.${sortField} ${order} LIMIT ${parseInt(limit)} OFFSET ${parseInt(offset)}`;
     
     return await db.query(sql, params);
   }
@@ -91,8 +96,15 @@ class Event {
   static async count(tenantId, options = {}) {
     const { status, eventType, startDate, endDate, upcoming } = options;
     
-    let sql = 'SELECT COUNT(*) as total FROM events WHERE tenant_id = ?';
-    const params = [tenantId];
+    let sql = 'SELECT COUNT(*) as total FROM events';
+    const params = [];
+    
+    if (tenantId) {
+      sql += ' WHERE tenant_id = ?';
+      params.push(tenantId);
+    } else {
+      sql += ' WHERE 1=1';
+    }
     
     if (status) {
       sql += ` AND status = ?`;

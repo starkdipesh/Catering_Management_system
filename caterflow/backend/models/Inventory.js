@@ -8,8 +8,13 @@ class InventoryCategory {
   }
 
   static async findAll(tenantId) {
-    const sql = 'SELECT * FROM inventory_categories WHERE tenant_id = ? AND is_active = TRUE ORDER BY name';
-    return await db.query(sql, [tenantId]);
+    if (tenantId) {
+      const sql = 'SELECT * FROM inventory_categories WHERE tenant_id = ? AND is_active = TRUE ORDER BY name';
+      return await db.query(sql, [tenantId]);
+    } else {
+      const sql = 'SELECT * FROM inventory_categories WHERE is_active = TRUE ORDER BY name';
+      return await db.query(sql);
+    }
   }
 
   static async create(data) {
@@ -59,9 +64,15 @@ class InventoryItem {
       FROM inventory_items ii
       LEFT JOIN inventory_categories ic ON ii.category_id = ic.id
       LEFT JOIN suppliers s ON ii.supplier_id = s.id
-      WHERE ii.tenant_id = ? AND ii.is_active = TRUE
     `;
-    const params = [tenantId];
+    const params = [];
+    
+    if (tenantId) {
+      sql += ` WHERE ii.tenant_id = ? AND ii.is_active = TRUE`;
+      params.push(tenantId);
+    } else {
+      sql += ` WHERE ii.is_active = TRUE`;
+    }
     
     if (categoryId) {
       sql += ` AND ii.category_id = ?`;
@@ -83,8 +94,7 @@ class InventoryItem {
       params.push(searchTerm, searchTerm);
     }
     
-    sql += ` ORDER BY ii.name LIMIT ? OFFSET ?`;
-    params.push(limit, offset);
+    sql += ` ORDER BY ii.name LIMIT ${parseInt(limit)} OFFSET ${parseInt(offset)}`;
     
     return await db.query(sql, params);
   }
@@ -92,8 +102,15 @@ class InventoryItem {
   static async count(tenantId, options = {}) {
     const { categoryId, lowStock } = options;
     
-    let sql = 'SELECT COUNT(*) as total FROM inventory_items WHERE tenant_id = ? AND is_active = TRUE';
-    const params = [tenantId];
+    let sql = 'SELECT COUNT(*) as total FROM inventory_items';
+    const params = [];
+    
+    if (tenantId) {
+      sql += ' WHERE tenant_id = ? AND is_active = TRUE';
+      params.push(tenantId);
+    } else {
+      sql += ' WHERE is_active = TRUE';
+    }
     
     if (categoryId) {
       sql += ` AND category_id = ?`;

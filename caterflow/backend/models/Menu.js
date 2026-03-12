@@ -8,8 +8,13 @@ class MenuCategory {
   }
 
   static async findAll(tenantId) {
-    const sql = 'SELECT * FROM menu_categories WHERE tenant_id = ? AND is_active = TRUE ORDER BY display_order, name';
-    return await db.query(sql, [tenantId]);
+    if (tenantId) {
+      const sql = 'SELECT * FROM menu_categories WHERE tenant_id = ? AND is_active = TRUE ORDER BY display_order, name';
+      return await db.query(sql, [tenantId]);
+    } else {
+      const sql = 'SELECT * FROM menu_categories WHERE is_active = TRUE ORDER BY display_order, name';
+      return await db.query(sql);
+    }
   }
 
   static async create(data) {
@@ -52,21 +57,27 @@ class MenuItem {
       SELECT mi.*, mc.name as category_name
       FROM menu_items mi
       LEFT JOIN menu_categories mc ON mi.category_id = mc.id
-      WHERE mi.tenant_id = ?
     `;
-    const params = [tenantId];
+    const params = [];
+    
+    if (tenantId) {
+      sql += ` WHERE mi.tenant_id = ?`;
+      params.push(tenantId);
+    } else {
+      sql += ` WHERE 1=1`;
+    }
     
     if (categoryId) {
       sql += ` AND mi.category_id = ?`;
       params.push(categoryId);
     }
     
-    if (isActive !== undefined) {
+    if (isActive !== undefined && isActive !== null) {
       sql += ` AND mi.is_active = ?`;
       params.push(isActive);
     }
     
-    if (isVegetarian !== undefined) {
+    if (isVegetarian !== undefined && isVegetarian !== null) {
       sql += ` AND mi.is_vegetarian = ?`;
       params.push(isVegetarian);
     }
@@ -77,8 +88,7 @@ class MenuItem {
       params.push(searchTerm, searchTerm);
     }
     
-    sql += ` ORDER BY mi.name LIMIT ? OFFSET ?`;
-    params.push(limit, offset);
+    sql += ` ORDER BY mi.name LIMIT ${parseInt(limit)} OFFSET ${parseInt(offset)}`;
     
     return await db.query(sql, params);
   }

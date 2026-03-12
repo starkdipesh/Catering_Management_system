@@ -6,10 +6,17 @@ const nextConfig = {
   images: {
     domains: ['localhost', 'caterflow.vercel.app'],
   },
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': require('path').resolve(__dirname, './'),
+    };
+    return config;
+  },
   async redirects() {
     return [
       {
-        source: '/',
+        source: '/home',
         destination: '/dashboard',
         permanent: false,
       },

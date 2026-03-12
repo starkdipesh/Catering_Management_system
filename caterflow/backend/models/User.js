@@ -28,21 +28,27 @@ class User {
 
   static async findByTenant(tenantId, options = {}) {
     const { role, isActive, limit = 50, offset = 0 } = options;
-    let sql = 'SELECT * FROM users WHERE tenant_id = ?';
-    const params = [tenantId];
+    let sql = 'SELECT * FROM users';
+    const params = [];
+    
+    if (tenantId) {
+      sql += ' WHERE tenant_id = ?';
+      params.push(tenantId);
+    } else {
+      sql += ' WHERE 1=1';
+    }
     
     if (role) {
       sql += ' AND role = ?';
       params.push(role);
     }
     
-    if (isActive !== undefined) {
+    if (isActive !== undefined && isActive !== null) {
       sql += ' AND is_active = ?';
       params.push(isActive);
     }
     
-    sql += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
-    params.push(limit, offset);
+    sql += ` ORDER BY created_at DESC LIMIT ${parseInt(limit)} OFFSET ${parseInt(offset)}`;
     
     return await db.query(sql, params);
   }

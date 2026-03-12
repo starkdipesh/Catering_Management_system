@@ -80,15 +80,15 @@ body {
   }
   
   .sidebar-link {
-    @apply group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-150 ease-in-out;
+    @apply flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-150 ease-in-out;
   }
   
   .sidebar-link-active {
-    @apply sidebar-link bg-primary-50 text-primary-700;
+    @apply flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-150 ease-in-out bg-primary-50 text-primary-700;
   }
   
   .sidebar-link-inactive {
-    @apply sidebar-link text-secondary-600 hover:bg-secondary-50 hover:text-secondary-900;
+    @apply flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-150 ease-in-out text-secondary-600 hover:bg-secondary-50 hover:text-secondary-900;
   }
   
   .table-header {

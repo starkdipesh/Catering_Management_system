@@ -21,9 +21,15 @@ class Customer {
         (SELECT COUNT(*) FROM events WHERE customer_id = c.id) as total_events,
         (SELECT COALESCE(SUM(final_amount), 0) FROM events WHERE customer_id = c.id AND status = 'completed') as total_revenue
       FROM customers c
-      WHERE c.tenant_id = ?
     `;
-    const params = [tenantId];
+    const params = [];
+    
+    if (tenantId) {
+      sql += ` WHERE c.tenant_id = ?`;
+      params.push(tenantId);
+    } else {
+      sql += ` WHERE 1=1`;
+    }
     
     if (search) {
       sql += ` AND (c.first_name LIKE ? OR c.last_name LIKE ? OR c.email LIKE ? OR c.phone LIKE ?)`;
@@ -36,7 +42,7 @@ class Customer {
       params.push(customerType);
     }
     
-    if (isActive !== undefined) {
+    if (isActive !== undefined && isActive !== null) {
       sql += ` AND c.is_active = ?`;
       params.push(isActive);
     }
@@ -45,8 +51,7 @@ class Customer {
     const sortField = allowedSortFields.includes(sortBy) ? sortBy : 'created_at';
     const order = sortOrder.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
     
-    sql += ` ORDER BY c.${sortField} ${order} LIMIT ? OFFSET ?`;
-    params.push(limit, offset);
+    sql += ` ORDER BY c.${sortField} ${order} LIMIT ${parseInt(limit)} OFFSET ${parseInt(offset)}`;
     
     return await db.query(sql, params);
   }
@@ -54,8 +59,15 @@ class Customer {
   static async count(tenantId, options = {}) {
     const { search, customerType, isActive } = options;
     
-    let sql = 'SELECT COUNT(*) as total FROM customers WHERE tenant_id = ?';
-    const params = [tenantId];
+    let sql = 'SELECT COUNT(*) as total FROM customers';
+    const params = [];
+    
+    if (tenantId) {
+      sql += ' WHERE tenant_id = ?';
+      params.push(tenantId);
+    } else {
+      sql += ' WHERE 1=1';
+    }
     
     if (search) {
       sql += ` AND (first_name LIKE ? OR last_name LIKE ? OR email LIKE ? OR phone LIKE ?)`;
@@ -68,7 +80,7 @@ class Customer {
       params.push(customerType);
     }
     
-    if (isActive !== undefined) {
+    if (isActive !== undefined && isActive !== null) {
       sql += ` AND is_active = ?`;
       params.push(isActive);
     }

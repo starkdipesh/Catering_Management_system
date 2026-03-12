@@ -36,9 +36,15 @@ class Invoice {
       FROM invoices i
       LEFT JOIN customers c ON i.customer_id = c.id
       LEFT JOIN events e ON i.event_id = e.id
-      WHERE i.tenant_id = ?
     `;
-    const params = [tenantId];
+    const params = [];
+    
+    if (tenantId) {
+      sql += ` WHERE i.tenant_id = ?`;
+      params.push(tenantId);
+    } else {
+      sql += ` WHERE 1=1`;
+    }
     
     if (status) {
       sql += ` AND i.status = ?`;
@@ -75,8 +81,7 @@ class Invoice {
       params.push(searchTerm, searchTerm, searchTerm);
     }
     
-    sql += ` ORDER BY i.created_at DESC LIMIT ? OFFSET ?`;
-    params.push(limit, offset);
+    sql += ` ORDER BY i.created_at DESC LIMIT ${parseInt(limit)} OFFSET ${parseInt(offset)}`;
     
     return await db.query(sql, params);
   }
@@ -84,8 +89,15 @@ class Invoice {
   static async count(tenantId, options = {}) {
     const { status, overdue } = options;
     
-    let sql = 'SELECT COUNT(*) as total FROM invoices WHERE tenant_id = ?';
-    const params = [tenantId];
+    let sql = 'SELECT COUNT(*) as total FROM invoices';
+    const params = [];
+    
+    if (tenantId) {
+      sql += ' WHERE tenant_id = ?';
+      params.push(tenantId);
+    } else {
+      sql += ' WHERE 1=1';
+    }
     
     if (status) {
       sql += ` AND status = ?`;
