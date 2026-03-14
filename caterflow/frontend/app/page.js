@@ -205,7 +205,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 lg:grid-cols-3">
+          <div className="gap-4 mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 lg:grid-cols-3">
             <div className="border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200">
               <div className="p-6">
                 <h3 className="text-2xl font-semibold text-secondary-900">Free Trial</h3>
@@ -223,41 +223,41 @@ export default function LandingPage() {
                   Start Free Trial
                 </Link>
               </div>
-              <div className="border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200">
-                <div className="p-6">
-                  <h3 className="text-2xl font-semibold text-secondary-900">Pro</h3>
-                  <p className="mt-4 text-sm text-secondary-500">
-                    Best for growing businesses
-                  </p>
-                  <p className="mt-8">
-                    <span className="text-4xl font-extrabold text-secondary-900">₹999</span>
-                    <span className="text-base font-medium text-secondary-500">/month</span>
-                  </p>
-                  <Link
-                    href="/register"
-                    className="mt-8 block w-full bg-primary-600 text-white border border-transparent rounded-md py-2 text-sm font-semibold hover:bg-primary-700 transition-colors text-center"
-                  >
+            </div>
+            <div className="border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200">
+              <div className="p-6">
+                <h3 className="text-2xl font-semibold text-secondary-900">Pro</h3>
+                <p className="mt-4 text-sm text-secondary-500">
+                  Best for growing businesses
+                </p>
+                <p className="mt-8">
+                  <span className="text-4xl font-extrabold text-secondary-900">₹999</span>
+                  <span className="text-base font-medium text-secondary-500">/month</span>
+                </p>
+                <Link
+                  href="/register"
+                  className="mt-8 block w-full bg-primary-600 text-white border border-transparent rounded-md py-2 text-sm font-semibold hover:bg-primary-700 transition-colors text-center"
+                >
                   Get Started
-                  </Link>
-                </div>
+                </Link>
               </div>
-              <div className="border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200">
-                <div className="p-6 relative">
-                  <h3 className="text-2xl font-semibold text-secondary-900">Business</h3>
-                  <p className="mt-4 text-sm text-secondary-500">
-                    For established catering companies
-                  </p>
-                  <p className="mt-8">
-                    <span className="text-4xl font-extrabold text-secondary-900">₹2999</span>
-                    <span className="text-base font-medium text-secondary-500">/month</span>
-                  </p>
-                  <Link
-                    href="/register"
-                    className="mt-8 block w-full bg-primary-600 text-white border border-transparent rounded-md py-2 text-sm font-semibold hover:bg-primary-700 transition-colors text-center"
-                  >
-                    Get Started
-                  </Link>
-                </div>
+            </div>
+            <div className="border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200">
+              <div className="p-6 relative">
+                <h3 className="text-2xl font-semibold text-secondary-900">Business</h3>
+                <p className="mt-4 text-sm text-secondary-500">
+                  For established catering companies
+                </p>
+                <p className="mt-8">
+                  <span className="text-4xl font-extrabold text-secondary-900">₹2999</span>
+                  <span className="text-base font-medium text-secondary-500">/month</span>
+                </p>
+                <Link
+                  href="/register"
+                  className="mt-8 block w-full bg-primary-600 text-white border border-transparent rounded-md py-2 text-sm font-semibold hover:bg-primary-700 transition-colors text-center"
+                >
+                  Get Started
+                </Link>
               </div>
             </div>
           </div>

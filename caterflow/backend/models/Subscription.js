@@ -30,8 +30,13 @@ class SubscriptionPlan {
     `;
     
     const result = await db.query(sql, [
-      name, description, price_monthly, price_yearly,
-      max_events_per_month, max_staff, JSON.stringify(features),
+      name, 
+      description || null, 
+      price_monthly, 
+      price_yearly || 0,
+      max_events_per_month || null, 
+      max_staff || null, 
+      JSON.stringify(features || []),
     ]);
     
     return result.insertId;

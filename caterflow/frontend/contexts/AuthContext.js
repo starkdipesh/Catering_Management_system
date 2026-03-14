@@ -13,7 +13,7 @@ export function AuthProvider({ children }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const publicPaths = ['/login', '/register', '/forgot-password', '/reset-password'];
+  const publicPaths = ['/', '/login', '/register', '/forgot-password', '/reset-password'];
 
   useEffect(() => {
     checkAuth();

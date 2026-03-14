@@ -171,6 +171,7 @@ router.delete('/admin/tenants/:id', authenticate, superAdminOnly, superAdminCont
 
 // Super Admin - Plans
 router.get('/admin/plans', authenticate, superAdminOnly, superAdminController.getPlans);
+router.get('/admin/plans/:id', authenticate, superAdminOnly, superAdminController.getPlan);
 router.post('/admin/plans', authenticate, superAdminOnly, superAdminController.createPlan);
 router.put('/admin/plans/:id', authenticate, superAdminOnly, superAdminController.updatePlan);
 

@@ -205,6 +205,30 @@ class SuperAdminController {
   }
 
   /**
+   * Get single subscription plan
+   */
+  async getPlan(req, res, next) {
+    try {
+      const { id } = req.params;
+      
+      const plan = await SubscriptionPlan.findById(id);
+      if (!plan) {
+        return res.status(404).json({
+          success: false,
+          message: 'Plan not found',
+        });
+      }
+
+      res.json({
+        success: true,
+        data: plan,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
    * Create subscription plan
    */
   async createPlan(req, res, next) {
